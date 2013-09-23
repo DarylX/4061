@@ -25,8 +25,12 @@ int main(int argc, char* argv[]){
         
 		printf("child pid: %d\n",pid);
 		
+		printf("parent's pid: %d\n",getppid());
+
 		execl("/bin/ls", "ls -l", (char*)0);
 		
+		
+
 		while (count < 10) {
 			count++;
 			sleep(1);
@@ -39,7 +43,7 @@ int main(int argc, char* argv[]){
 		
 		//exit(status);
     }else if(pid > 0 ){
-		printf("parent pid: %d\n",pid);
+      //	printf("parent pid: %d\n",pid);
 		
 		//wait(&status);
         printf("the parent process\n");

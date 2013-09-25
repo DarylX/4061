@@ -7,7 +7,7 @@
 
 int main(int argc, char* argv[]){
     
-	int X = open("./output_file.txt", O_WRONLY);
+    int X = open("./output_file.txt", O_WRONLY);
 	
     pid_t pid;
     
@@ -18,16 +18,18 @@ int main(int argc, char* argv[]){
     
     printf("before the fork\n");
     
+    
+
     pid = fork();
 	
     if(pid == 0){
         printf("this is the child process\n");
         
-		printf("child pid: %d\n",pid);
+	        printf("child pid: %d\n",pid);
 		
 		printf("parent's pid: %d\n",getppid());
 
-		execl("/bin/ls", "ls -l", (char*)0);
+		execl("/bin/ls", "-l", (char*)0);
 		
 		
 

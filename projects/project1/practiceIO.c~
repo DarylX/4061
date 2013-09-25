@@ -1,42 +1,45 @@
-//#include <types.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
-#include <errno.h>
-#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
-// for ’status’ variable:
-#define INELIGIBLE 0
-#define READY 1
-#define RUNNING 2
-#define FINISHED 3
-#define MAX_LENGTH 1024
-#define MAX_CHILDREN 10
-#define MAX_NODES 50
+int main(int argc, char* argv[]){
+    
+  printf("%s", argv[1]);
 
-typedef struct node {
-        int id; // corresponds to line number in graph text file
-        char prog[MAX_LENGTH]; // prog + arguments
-        char input[MAX_LENGTH]; // filename
-        char output[MAX_LENGTH]; // filename
-        int children[MAX_CHILDREN]; // children IDs
-        int num_children; // how many children this node has
-        int status; // ineligible/ready/running/finished
-        pid_t pid; // track it when it's running
-} node_t;
-
-int parse_input_line(char*, int, node_t*);
-
-int main(int argc, char **argv){
-    	
+    int x = open(*argv, O_WRONLY);
 	
+    pid_t pid;    
 
-    	return 0;
+    int status = 0;
+	
+    int count = 0;
+    int parentCount = 0;
+    
+    printf("Reading file now:\n");
+
+    
+    if(x == -1){
+      printf("no\n");
+    }else{
+      printf("file is: %d\n", x);
+    }
+
+    // pid = fork();
+    
+    
+
+
+    close(x);
+    
+    return 0;   
 }
 
 /* The parse_input_line function takes a single line from the input file and a pointer to node_t (with memory allocated)
  * and populates the prog, input, output, children and num_children fields of the node_t structure. It returns 1 on success */
-
+/*
 int parse_input_line(char *s, int id, node_t *n) {
 
 
@@ -114,3 +117,4 @@ void freemakeargv(char **argv) {
 		free(*argv);
 	free(argv);
 }
+*/

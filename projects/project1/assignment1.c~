@@ -22,16 +22,16 @@ typedef struct node {
         int children[MAX_CHILDREN]; // children IDs
         int num_children; // how many children this node has
         int status; // ineligible/ready/running/finished
-        pid_t pid; // track it when it's running
+        pid_t pid; // track it when it’s running
 } node_t;
 
 int parse_input_line(char*, int, node_t*);
 
-int main(int argc, char **argv){
-    	
-	
-
-    	return 0;
+int main(int argc, char *argv[]){
+    
+    
+    return 0;
+    
 }
 
 /* The parse_input_line function takes a single line from the input file and a pointer to node_t (with memory allocated)

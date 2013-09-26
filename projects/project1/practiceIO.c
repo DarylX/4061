@@ -9,8 +9,8 @@ int main(int argc, char* argv[]){
     
   printf("%s", argv[1]);
 
-    int x = open(argv[1], O_WRONLY);
-	
+    fopen(argv[1], O_WRONLY);
+
     pid_t pid;    
 
     int status = 0;

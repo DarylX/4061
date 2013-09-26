@@ -7,9 +7,7 @@
 
 int main(int argc, char* argv[]){
     
-  printf("%s", argv[1]);
-
-    fopen(argv[1], O_WRONLY);
+    printf("FILE NAME: %s\n", argv[1]);
 
     pid_t pid;    
 
@@ -20,20 +18,18 @@ int main(int argc, char* argv[]){
     
     printf("Reading file now:\n");
 
+    FILE* fiel = fopen(argv[1], "r");
     
-    if(x == -1){
-      printf("no\n");
-    }else{
-      printf("file is: %d\n", x);
-    }
+    char temp[1023];
 
-    // pid = fork();
+    // fscanf(fiel,"%s",temp);
     
-    
+    fread(temp,1,1023,fiel);
 
+    printf("STRING IS: %s\n",temp);
 
-    close(x);
-    
+    fclose(fiel);
+
     return 0;   
 }
 

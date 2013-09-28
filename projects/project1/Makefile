@@ -1,10 +1,9 @@
-CXXFLAGS = --error-printer --abort-on-fail --have-eh
+all:	main.o
+	gcc main.o -o graphexec
 
-FLAGS = -Wall -g
-
-graphexec.o:	graphexec.cpp grapgexec.h
-	g++ $(FLAGS) -c graphexec.cpp 
+main.o:	main.c
+	gcc -c main.c
 
 clean:
-	rm -Rf *.o *~ *DS_Store\
-		assignment1 practice practiceIO
+	rm -Rf *.o *~\
+		graphexec\

@@ -1,0 +1,7 @@
+sleep 1:6:stdin:stdout
+ls -l:6:stdin:ls-out.txt
+sleep 1:6:stdin:stdout
+quota -v:6:stdin:quota-out.txt
+sleep 1:6:stdin:stdout
+w:6:stdin:w-out.txt
+cat ls-out.txt quota-out.txt w-out.txt:none:stdin:everything.txt

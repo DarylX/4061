@@ -5,10 +5,6 @@
 #include <string.h>
 #include <errno.h>
 #include <stdbool.h>
-//#include <sys/wait.h>
-//#include <sys/types.h>
-//#include <sys/stat.h>
-//TODO: ^Are those needed?
 
 // exit calls
 #define	EXIT_FAIL_TO_OPEN_FILES -2

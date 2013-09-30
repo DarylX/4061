@@ -82,8 +82,7 @@ int parse_input_line(char *s, int id, node_t *node) {
 	//parse child list (strings[1]) at every space for processes, check errors
 	if(makeargv(strings[1], " ", &child_list) == -1) return 0;
     
-    // TODO: BUFFER STUFF?? READING LINE? EXPLAIN PLS
-    //if the line ends in line location, end it w/ null
+    //read text line into line_location
     for (i = 0; i < tok_count; i++) {
 		if((line_location = strpbrk(strings[i], "\n\r"))){
 			*line_location = '\0';
@@ -216,10 +215,6 @@ void determine_eligible(node_t * nodes[], int count) {
 // ============================= Run Node =============================
 // runs node, assuming it is eligible, and does the nessecary forks, execs, etc
 // returns status of the node after completion, which should be 3 (FINISHED)
-
-//TODO: Not entirely sure on the usage of perror;
-//also not entirely following the flow of the opens and dups and such
-//gotta read the book and look over notes to figure those out
 
 int run_node(node_t * node) {
 	char ** child_argv;

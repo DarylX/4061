@@ -6,12 +6,6 @@
 #include <errno.h>
 #include <stdbool.h>
 
-// exit calls
-#define	EXIT_FAIL_TO_OPEN_FILES -2
-#define	EXIT_FAIL_TO_DUP_FILES -2
-#define	EXIT_BAD_INPUT -3
-
-
 // taken from project writeup:
 
 // for 'status' variable:

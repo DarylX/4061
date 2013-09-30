@@ -173,8 +173,8 @@ int read_file(FILE * file, node_t * array[], int max_nodes) {
             array[count] = node;
 			count++;
         } else {
-            perror("Error: Could not produce node from line.");
-            exit(EXIT_BAD_INPUT);
+            perror("Could not produce node from line");
+            return -1;
         }
 	}
 	link_nodes(array, count);
@@ -215,6 +215,7 @@ void determine_eligible(node_t * nodes[], int count) {
 // ============================= Run Node =============================
 // runs node, assuming it is eligible, and does the nessecary forks, execs, etc
 // returns status of the node after completion, which should be 3 (FINISHED)
+// or returns -1 if failed to run
 
 int run_node(node_t * node) {
 	char ** child_argv;
@@ -228,34 +229,34 @@ int run_node(node_t * node) {
 	//store old input and output file descriptors
 	fflush(stdout);
 	if ((oldstdin = dup(0)) == -1) {
-		perror("Failed to back-up stdin. \n");
-		exit(EXIT_FAIL_TO_DUP_FILES);
-	}
+		perror("Failed to back-up stdin");
+        return -1;
+    }
 	if ((oldstdout = dup(1)) == -1) {
-		perror("Failed to back-up stdout. \n");
-		exit(EXIT_FAIL_TO_DUP_FILES);
+		perror("Failed to back-up stdout");
+		return -1;
 	}
     
 	//open input and output file descriptors
-	if ((input_fd  = open(node->input, O_RDONLY | O_CREAT, 0644)) == -1) {
-		perror("Failed to open input file. \n");
-		exit(EXIT_FAIL_TO_OPEN_FILES);
-	}
+	if ((input_fd = open(node->input, O_RDONLY | O_CREAT, 0644)) == -1) {
+		perror("Failed to open input file");
+        return -1;
+    }
 	if ((output_fd = open(node->output, O_WRONLY | O_CREAT, 0644)) == -1) {
-		perror("Failed to open output file. \n");
-		exit(EXIT_FAIL_TO_OPEN_FILES);
-	}
+		perror("Failed to open output file");
+        return -1;
+    }
     
 	//redirect input and output file descriptors
 	fflush(stdout);
 	if (dup2(input_fd, STDIN_FILENO) == -1) {
-		perror("Failed to redirect stdin. \n");
-		exit(EXIT_FAIL_TO_DUP_FILES);
-	}
+		perror("Failed to redirect stdin");
+        return -1;
+    }
 	if (dup2(output_fd, STDOUT_FILENO) == -1) {
-		perror("Failed to redirect stdout. \n");
-		exit(EXIT_FAIL_TO_DUP_FILES);
-	}
+		perror("Failed to redirect stdout");
+        return -1;
+    }
     
     //parse arg at every space
 	child_argc = makeargv(node->prog, " ", &child_argv);
@@ -276,13 +277,13 @@ int run_node(node_t * node) {
 	//replace old input and output file descriptors
 	fflush(stdout);
 	if (dup2(oldstdout, STDOUT_FILENO) == -1) {
-		perror("Failed to redirect stdout to original stdout.\n");
-		exit(EXIT_FAIL_TO_DUP_FILES);
-	}
+		perror("Failed to redirect stdout to original stdout");
+        return -1;
+    }
 	if (dup2(oldstdin, STDIN_FILENO) == -1) {
-		perror("Failed to redirect stdin to original stdin.\n");
-		exit(EXIT_FAIL_TO_DUP_FILES);
-	}
+		perror("Failed to redirect stdin to original stdin");
+        return -1;
+    }
     
 	if (close(input_fd)) perror("Failed to close input_fd");
 	if (close(output_fd)) perror("Failed to close output_fd");
@@ -315,8 +316,8 @@ int main(int argc, const char * argv[]) {
     //check that there is correct number of arguments
 	if (argc != 2) {
 		printf("graphexec requires 2 arguments.\n");
-		exit(EXIT_BAD_INPUT);
-	}
+        return -1;
+    }
     
     //open file and check that it was sucessful
 	file = fopen(argv[1], "r");
@@ -338,10 +339,12 @@ int main(int argc, const char * argv[]) {
 				if (nodes[i]->status != FINISHED) {
 					finished = false;
 					if (nodes[i]->status == READY) {
-						printf("Node %i Status: Running",i);
-						if(run_node(nodes[i]) == FINISHED) {
+						printf("Node %i Status: Running", i);
+						if(run_node(nodes[i]) == FINISHED &&
+                            run_node(nodes[i]) != -1) {
                             printf(" >> Finished!\n");
-                        } else perror("Error running node");
+                        } else
+                            perror("Error running node");
 					}
 				}
 			}
@@ -349,7 +352,8 @@ int main(int argc, const char * argv[]) {
         
 		//cleanup
 		free_array(nodes, count);
-		fclose(file);
+        if (fclose(file) == -1)
+            perror("Failed to close file");
 	}
     
 	return 0;
